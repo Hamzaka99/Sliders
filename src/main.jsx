@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import {
-  ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, Clock3, ExternalLink, Globe2,
+  ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, CircleHelp, Clock3, ExternalLink, Globe2,
   Layers3, Maximize2, Minimize2, Moon, PackageCheck, PanelLeftClose,
   PanelLeftOpen, Presentation, Ship, Sparkles, Sun, X
 } from 'lucide-react';
-import { interfaceText, languages, presentationLibrary } from './presentation.js';
+import { acronymExpansions, helpDetails, helpText, interfaceText, languages, presentationLibrary } from './presentation.js';
 import './styles.css';
 
 const images = {
@@ -22,6 +23,7 @@ const images = {
 const chapterImages = [null, images.history, images.history, images.rules, images.trade, images.finance, images.quality, images.case];
 const chapterPalette = ['mint', 'gold', 'gold', 'blue', 'coral', 'mint', 'gold', 'blue'];
 const localized = (value, language) => typeof value === 'string' ? value : value?.[language] ?? value?.en ?? '';
+const getHelpDetails = (language, helpKey) => helpKey.split('.').reduce((current, key) => current?.[key], helpDetails[language]) || '';
 const localizedMode = (mode, language) => mode === 'Any mode'
   ? ({ fr: 'Tous modes', ar: 'جميع الوسائط' }[language] ?? mode)
   : ({ fr: 'Maritime / fluvial', ar: 'بحري / نهري' }[language] ?? mode);
@@ -29,6 +31,30 @@ const pad = value => String(value).padStart(2, '0');
 
 function IconButton({ label, children, onClick, active = false, className = '' }) {
   return <button type="button" className={`icon-button ${active ? 'is-active' : ''} ${className}`} onClick={onClick} aria-label={label} title={label}>{children}</button>;
+}
+
+function ConceptHelp({ title, explanation, helpKey, language }) {
+  const [open, setOpen] = useState(false);
+  const dialogId = useId();
+  const text = helpText[language];
+  const details = getHelpDetails(language, helpKey) || explanation;
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const onKeyDown = event => { if (event.key === 'Escape') setOpen(false); };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [open]);
+
+  return <>
+    <button className="concept-help-button" type="button" aria-label={`${text.label}: ${title}`} aria-haspopup="dialog" aria-expanded={open} aria-controls={open ? dialogId : undefined} title={`${text.label}: ${title}`} onClick={event => { event.stopPropagation(); setOpen(true); }}><CircleHelp size={15} strokeWidth={1.8} /></button>
+    {open && createPortal(<div className="concept-help-backdrop" onMouseDown={event => { if (event.target === event.currentTarget) setOpen(false); }}>
+      <motion.section id={dialogId} className="concept-help-dialog" role="dialog" aria-modal="true" aria-labelledby={`${dialogId}-title`} initial={{ opacity: 0, y: 10, scale: .985 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8 }}>
+        <div className="concept-help-heading"><div><span>{text.title}</span><h2 id={`${dialogId}-title`}>{title}</h2></div><IconButton label={text.close} onClick={() => setOpen(false)}><X size={17} /></IconButton></div>
+        <p>{details}</p>
+      </motion.section>
+    </div>, document.body)}
+  </>;
 }
 
 function Brand({ language, onLibrary, compact = false }) {
@@ -91,9 +117,9 @@ function Notes({ chapter, language, open }) {
 function OverviewSlide({ chapter, language }) {
   return <div className="overview-content">
     <div className="pillar-grid">{chapter.pillars.map((pillar, index) => <motion.article className={`pillar-panel ${pillar.tone}`} key={pillar.number} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .08 + index * .08 }}>
-      <span className="pillar-index">{pillar.number}</span><span className="pillar-orgs">{pillar.orgs}</span><h2>{localized(pillar.title, language)}</h2><p>{localized(pillar.text, language)}</p><span className="pillar-rule" />
+       <span className="pillar-index">{pillar.number}</span><span className="pillar-orgs">{pillar.orgs}</span><div className="pillar-title"><h2>{localized(pillar.title, language)}</h2><ConceptHelp title={localized(pillar.title, language)} helpKey={`overview.${pillar.number}`} explanation={localized(pillar.text, language)} language={language} /></div><p>{localized(pillar.text, language)}</p><span className="pillar-rule" />
     </motion.article>)}</div>
-    <section className="glossary-strip"><div className="glossary-label"><BookOpen size={16} /><span>{interfaceText[language].glossary}</span></div><div className="glossary-list">{chapter.glossary.map(item => <div className="glossary-item" key={item.term}><strong>{item.term}</strong><span>{localized(item.expansion, language)}</span></div>)}</div></section>
+    <section className="glossary-strip"><div className="glossary-label"><BookOpen size={16} /><span>{interfaceText[language].glossary}</span></div><div className="glossary-list">{chapter.glossary.map(item => <div className="glossary-item" key={item.term}><div><strong>{item.term}</strong><ConceptHelp title={item.term} helpKey={`glossary.${item.term}`} explanation={localized(item.expansion, language)} language={language} /></div><span>{localized(item.expansion, language)}</span></div>)}</div></section>
   </div>;
 }
 
@@ -104,7 +130,7 @@ function TimelineSlide({ chapter, language }) {
     <div className="timeline-track" role="tablist" aria-label={localized(chapter.title, language)}>{chapter.events.map((item, index) => <button className={`timeline-point ${selected === index ? 'active' : ''}`} type="button" role="tab" aria-selected={selected === index} onClick={() => setSelected(index)} key={item.year}><span className="timeline-dot" /><strong>{item.year}</strong><span>{localized(item.name, language)}</span></button>)}</div>
     <AnimatePresence mode="wait"><motion.div className="timeline-detail" key={event.year} initial={{ opacity: 0, x: 18 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -12 }} transition={{ duration: .24 }}>
       <div className="timeline-photo" style={{ backgroundImage: `url(${images.history})` }}><span className="photo-caption">{localized(event.place, language)}</span><span className="photo-year">{event.year}</span></div>
-      <div className="timeline-copy"><span className="detail-location">{localized(event.place, language)}</span><h2>{localized(event.name, language)}</h2><div className="why-impact"><section><span>{interfaceText[language].why}</span><p>{localized(event.why, language)}</p></section><section><span>{interfaceText[language].impact}</span><p>{localized(event.impact, language)}</p></section></div></div>
+         <div className="timeline-copy"><span className="detail-location">{localized(event.place, language)}</span><div className="concept-title"><h2>{localized(event.name, language)}</h2><ConceptHelp title={localized(event.name, language)} helpKey={`timeline.${event.year}`} explanation={`${localized(event.why, language)}\n\n${localized(event.impact, language)}`} language={language} /></div><div className="why-impact"><section><span>{interfaceText[language].why}</span><p>{localized(event.why, language)}</p></section><section><span>{interfaceText[language].impact}</span><p>{localized(event.impact, language)}</p></section></div></div>
     </motion.div></AnimatePresence>
   </div>;
 }
@@ -134,19 +160,19 @@ function HistoryCarousel({ chapter, language, storyIndex, onPrevious, onNext }) 
       <img className="history-carousel-photo" src={story.image} alt={localized(story.imageAlt, language)} />
       <div className="history-carousel-shade" />
       <div className="history-carousel-topline"><span>{localized(chapter.kicker, language).split('/').slice(1).join('/').trim()}</span><span>{pad(storyIndex + 1)} / {pad(chapter.stories.length)}</span></div>
-      <div className="history-carousel-copy"><span className="history-carousel-period">{localized(story.period, language)}</span><h1>{localized(story.title, language)}</h1><p className="history-carousel-subtitle">{localized(story.subtitle, language)}</p><p className="history-carousel-body">{localized(story.text, language)}</p></div>
+      <div className="history-carousel-copy"><span className="history-carousel-period">{localized(story.period, language)}</span><div className="concept-title"><h1>{localized(story.title, language)}</h1><ConceptHelp title={localized(story.title, language)} helpKey={`stories.${story.id}`} explanation={localized(story.subtitle, language)} language={language} /></div><p className="history-carousel-subtitle">{localized(story.subtitle, language)}</p><p className="history-carousel-body">{localized(story.text, language)}</p></div>
       <div className="history-carousel-bottom"><span>{ui.imageCredit}: {story.imageCredit} <a href={story.imageSource} target="_blank" rel="noreferrer" aria-label={`${ui.imageCredit}: ${story.imageCredit}`}><ExternalLink size={13} /></a></span><div className="history-carousel-controls"><button type="button" onClick={onPrevious} aria-label={ui.previous} title={ui.previous}><ArrowLeft size={17} /></button><button type="button" onClick={onNext} aria-label={ui.next} title={ui.next}><ArrowRight size={17} /></button></div></div>
     </motion.article></AnimatePresence>
   </section>;
 }
 
 function HsCode({ hs, language }) {
-  return <section className="hs-feature"><div className="hs-heading"><span>WCO / OMD</span><h2>{localized(hs.title, language)}</h2><strong>{hs.code}</strong></div><div className="hs-breakdown">{hs.parts.map(part => <div key={part.digits}><strong>{part.digits}</strong><span>{localized(part.name, language)}</span></div>)}</div></section>;
+  return <section className="hs-feature"><div className="hs-heading"><div className="hs-source"><span>WCO / OMD <ConceptHelp title="WCO / OMD" helpKey="organizations.WCO / OMD" explanation={localized(acronymExpansions['WCO / OMD'], language)} language={language} /></span><small>{localized(acronymExpansions['WCO / OMD'], language)}</small></div><h2>{localized(hs.title, language)}</h2><strong>{hs.code}</strong><ConceptHelp title={hs.code} helpKey="hs" explanation={localized(hs.title, language)} language={language} /></div><div className="hs-breakdown">{hs.parts.map(part => <div key={part.digits}><strong>{part.digits}</strong><span>{localized(part.name, language)}</span><ConceptHelp title={part.digits} helpKey={`hsCode.${part.digits.replace('.', '-')}`} explanation={localized(part.name, language)} language={language} /></div>)}</div></section>;
 }
 
 function InstitutionsSlide({ chapter, language }) {
   return <div className="institutions-content"><div className="institution-grid">{chapter.organizations.map((org, index) => <motion.article className="institution-card" key={org.acronym} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .04 * index }}>
-    <div className="institution-card-top"><span>{org.acronym}</span><small>{localized(org.location, language)}</small></div><ul>{org.items[language].map(item => <li key={item}>{item}</li>)}</ul>
+    <div className="institution-card-top"><div className="institution-acronym"><strong>{org.acronym}</strong><span>{localized(acronymExpansions[org.acronym], language)}</span></div><ConceptHelp title={org.acronym} helpKey={`organizations.${org.acronym}`} explanation={org.items[language].join('\n\n')} language={language} /><small>{localized(org.location, language)}</small></div><ul>{org.items[language].map(item => <li key={item}>{item}</li>)}</ul>
   </motion.article>)}</div><HsCode hs={chapter.hs} language={language} /></div>;
 }
 
@@ -156,23 +182,43 @@ function IncotermsSlide({ chapter, language }) {
   const ui = interfaceText[language];
   return <div className="incoterms-content">
     <div className="term-toolbar"><div className="term-picker" role="tablist" aria-label="Incoterm">{Object.keys(chapter.terms).map(code => <button key={code} className={selected === code ? 'active' : ''} type="button" role="tab" aria-selected={selected === code} onClick={() => setSelected(code)}>{code}</button>)}</div><span className="term-legend"><i /> {ui.seller} <i className="buyer-legend" /> {ui.buyer}</span></div>
-    <AnimatePresence mode="wait"><motion.div className="term-summary" key={selected} initial={{ opacity: 0, y: 9 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -7 }} transition={{ duration: .2 }}><div><span className="term-code">{selected}</span><h2>{localized(term.name, language)}</h2></div><span className="mode-tag"><Ship size={14} /> {localizedMode(term.mode, language)}</span></motion.div></AnimatePresence>
+    <AnimatePresence mode="wait"><motion.div className="term-summary" key={selected} initial={{ opacity: 0, y: 9 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -7 }} transition={{ duration: .2 }}><div><span className="term-code">{selected}</span><h2>{localized(term.name, language)}</h2><ConceptHelp title={`${selected} · ${localized(term.name, language)}`} helpKey={`incoterms.${selected}`} explanation={`${localized(term.risk, language)}\n\n${localized(term.customs, language)}`} language={language} /></div><span className="mode-tag"><Ship size={14} /> {localizedMode(term.mode, language)}</span></motion.div></AnimatePresence>
     <div className="supply-journey">{chapter.stages.map((stage, index) => <div key={index} className={`journey-stage ${term.sellerStages[index] ? 'seller-stage' : 'buyer-stage'}`}><span className="stage-number">0{index + 1}</span><span>{localized(stage, language)}</span><small>{term.sellerStages[index] ? ui.seller : ui.buyer}</small>{index === term.riskAt && <span className="risk-marker">RISK</span>}</div>)}</div>
     <div className="term-explanation"><section className="term-risk"><span><ArrowUpRight size={15} /> {ui.risk}</span><p>{localized(term.risk, language)}</p></section><section><span><PackageCheck size={15} /> {ui.customs}</span><p>{localized(term.customs, language)}</p></section><section><span><ArrowRight size={15} /> {ui.cost}</span><p>{localized(chapter.stages[term.costTo], language)}</p></section></div>
     <p className="term-footnote">{localized(chapter.note, language)}</p>
-    <div className="incoterm-table-wrap"><table className="incoterm-table"><thead><tr>{[language === 'fr' ? 'Règle' : language === 'ar' ? 'المصطلح' : 'Term', language === 'fr' ? 'Nom complet' : language === 'ar' ? 'الاسم الكامل' : 'Full name', ui.transport, ui.risk].map(item => <th key={item}>{item}</th>)}</tr></thead><tbody>{Object.entries(chapter.terms).map(([code, item]) => <tr key={code} className={code === selected ? 'selected' : ''} onClick={() => setSelected(code)}><td><strong>{code}</strong></td><td>{localized(item.name, language)}</td><td>{localizedMode(item.mode, language)}</td><td>{localized(item.risk, language)}</td></tr>)}</tbody></table></div>
+    <div className="incoterm-table-wrap"><table className="incoterm-table"><thead><tr>{[language === 'fr' ? 'Règle' : language === 'ar' ? 'المصطلح' : 'Term', language === 'fr' ? 'Nom complet' : language === 'ar' ? 'الاسم الكامل' : 'Full name', ui.transport, ui.risk].map(item => <th key={item}>{item}</th>)}</tr></thead><tbody>{Object.entries(chapter.terms).map(([code, item]) => <tr key={code} className={code === selected ? 'selected' : ''} onClick={() => setSelected(code)}><td><strong>{code}</strong><ConceptHelp title={`${code} · ${localized(item.name, language)}`} helpKey={`incoterms.${code}`} explanation={`${localized(item.risk, language)}\n\n${localized(item.customs, language)}`} language={language} /></td><td>{localized(item.name, language)}</td><td>{localizedMode(item.mode, language)}</td><td>{localized(item.risk, language)}</td></tr>)}</tbody></table></div>
   </div>;
 }
 
 function FinanceSlide({ chapter, language }) {
   return <div className="finance-content">
-    <div className="finance-grid">{chapter.institutions.map((item, index) => <motion.article className={`finance-card finance-card-${index + 1}`} key={item.acronym} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .06 * index }}><span className="finance-badge">{item.badge}</span><strong className="finance-acronym">{item.acronym}</strong><h2>{localized(item.title, language)}</h2><ul>{item.points[language].map(point => <li key={point}>{point}</li>)}</ul></motion.article>)}</div>
-    <section className="lc-process"><div className="process-heading"><span>ICC · UCP 600</span><h2>{interfaceText[language].checklist}</h2></div><div className="process-track">{chapter.steps.map((step, index) => <div className="process-step" key={index}><span className="process-index">0{index + 1}</span><h3>{localized(step.title, language)}</h3><p>{localized(step.text, language)}</p>{index < chapter.steps.length - 1 && <ArrowRight className="process-arrow" size={18} />}</div>)}</div></section>
+    <div className="finance-grid">{chapter.institutions.map((item, index) => { const expansion = localized(acronymExpansions[item.acronym], language); const explanation = item.points[language].join('\n\n'); return <motion.article className={`finance-card finance-card-${index + 1}`} key={item.acronym} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .06 * index }}><span className="finance-badge">{item.badge}</span><div className="finance-concept-title"><strong className="finance-acronym">{item.acronym}</strong><ConceptHelp title={item.acronym} helpKey={`finance.${item.acronym}`} explanation={explanation} language={language} /></div>{expansion && expansion !== localized(item.title, language) && <span className="acronym-expansion">{expansion}</span>}<h2>{localized(item.title, language)}</h2><ul>{item.points[language].map(point => <li key={point}>{point}</li>)}</ul></motion.article>; })}</div>
+    <section className="lc-process"><div className="process-heading"><span>ICC · UCP 600</span><ConceptHelp title="ICC · UCP 600" helpKey="finance.BANKS · UCP 600" explanation={chapter.note} language={language} /><small>{language === 'fr' ? 'CCI · Règles du crédit documentaire' : language === 'ar' ? 'غرفة التجارة الدولية · قواعد الاعتماد المستندي' : 'International Chamber of Commerce · Documentary credit rules'}</small><h2>{interfaceText[language].checklist}</h2></div><div className="process-track">{chapter.steps.map((step, index) => <div className="process-step" key={index}><span className="process-index">0{index + 1}</span><div className="process-concept-title"><h3>{localized(step.title, language)}</h3><ConceptHelp title={localized(step.title, language)} helpKey={`creditSteps.${index}`} explanation={localized(step.text, language)} language={language} /></div><p>{localized(step.text, language)}</p>{index < chapter.steps.length - 1 && <ArrowRight className="process-arrow" size={18} />}</div>)}</div></section>
   </div>;
 }
 
 function StandardsSlide({ chapter, language }) {
-  return <div className="standards-content"><div className="standards-feature" style={{ backgroundImage: `linear-gradient(90deg, #132123f2 0%, #132123a6 56%, #13212322 100%), url("${images.quality}")` }}><span>QUALITY / SAFETY / MOVEMENT</span><p>{localized(chapter.intro, language)}</p></div><div className="standards-grid">{chapter.bodies.map((item, index) => <motion.article className={`standard-item standard-${index + 1}`} key={item.acronym} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .05 * index }}><div className="standard-top"><strong>{item.acronym}</strong><span>{item.badge}</span></div><h2>{localized(item.title, language)}</h2><ul>{item.points[language].map(point => <li key={point}>{point}</li>)}</ul></motion.article>)}</div></div>;
+  const ui = interfaceText[language];
+  return <div className="standards-content">
+    <div className="standards-feature" style={{ backgroundImage: `linear-gradient(90deg, #132123eF 0%, #132123bc 54%, #13212325 100%), url("${images.quality}")` }}>
+      <span>{language === 'fr' ? 'DU CONTRAT À LA FRONTIÈRE' : language === 'ar' ? 'من العقد إلى الحدود' : 'FROM CONTRACT TO BORDER'}</span>
+      <p>{localized(chapter.lens, language)}</p>
+    </div>
+    <div className="standards-phase-grid">{chapter.phases.map((phase, index) => <motion.section className={`standards-phase phase-${phase.id}`} key={phase.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .06 * index }}>
+      <header className="standards-phase-heading"><span>0{index + 1}</span><h2>{localized(phase.title, language)}</h2><ConceptHelp title={localized(phase.title, language)} helpKey={`phases.${phase.id}`} explanation={localized(phase.description, language)} language={language} /></header>
+      <p className="phase-description">{localized(phase.description, language)}</p>
+      <div className="phase-organization-list">{phase.organizations.map(acronym => {
+        const item = chapter.bodies.find(body => body.acronym === acronym);
+        return <article className="standard-item" key={item.acronym}>
+          <div className="standard-top"><strong>{item.acronym}</strong><span>{item.badge}</span><ConceptHelp title={item.acronym} helpKey={`standards.${item.acronym}`} explanation={`${item.points[language].join('\n\n')}\n\n${localized(chapter.applications[item.acronym], language)}`} language={language} /></div>
+          <p className="acronym-expansion standard-expansion">{localized(acronymExpansions[item.acronym], language)}</p>
+          <div className="standard-concept-title"><h3>{localized(item.title, language)}</h3></div>
+          <ul>{item.points[language].map(point => <li key={point}>{point}</li>)}</ul>
+          <div className="standard-application"><strong>{ui.inPractice}</strong><p>{localized(chapter.applications[item.acronym], language)}</p></div>
+        </article>;
+      })}</div>
+    </motion.section>)}</div>
+  </div>;
 }
 
 function CaseSlide({ chapter, language }) {
@@ -181,7 +227,7 @@ function CaseSlide({ chapter, language }) {
   return <div className="case-content">
     <div className="case-route" style={{ backgroundImage: `linear-gradient(90deg, #0d191bdc, #0d191b55), url("${images.case}")` }}><span className="route-label route-origin">{chapter.route.from}<small>{language === 'fr' ? 'Origine' : language === 'ar' ? 'المنشأ' : 'ORIGIN'}</small></span><span className="route-dash" /><span className="route-ship"><Ship size={29} strokeWidth={1.25} /></span><span className="route-label route-destination">{chapter.route.to}<small>{language === 'fr' ? 'Destination' : language === 'ar' ? 'الوجهة' : 'DESTINATION'}</small></span><span className="route-caption">{chapter.route.distance}</span></div>
     <div className="case-lower"><nav className="case-step-list" aria-label={localized(chapter.title, language)}>{chapter.steps.map((item, index) => <button className={selected === index ? 'active' : ''} key={index} type="button" onClick={() => setSelected(index)}><span>{pad(index + 1)}</span><strong>{localized(item.title, language)}</strong><ArrowRight size={14} /></button>)}</nav>
-      <AnimatePresence mode="wait"><motion.article className="case-step-detail" key={selected} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }} transition={{ duration: .2 }}><span className="detail-location">{interfaceText[language].chapter} {pad(selected + 1)} / 06</span><h2>{localized(step.title, language)}</h2><div className="institution-tags">{step.orgs.split(' · ').map(org => <span key={org}>{org}</span>)}</div><p>{localized(step.detail, language)}</p><div className="case-step-controls"><button type="button" onClick={() => setSelected(Math.max(0, selected - 1))} disabled={selected === 0}><ArrowLeft size={15} /> {interfaceText[language].previous}</button><button type="button" onClick={() => setSelected(Math.min(chapter.steps.length - 1, selected + 1))} disabled={selected === chapter.steps.length - 1}>{interfaceText[language].more} <ArrowRight size={15} /></button></div></motion.article></AnimatePresence></div>
+      <AnimatePresence mode="wait"><motion.article className="case-step-detail" key={selected} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }} transition={{ duration: .2 }}><span className="detail-location">{interfaceText[language].chapter} {pad(selected + 1)} / 06</span><div className="case-concept-title"><h2>{localized(step.title, language)}</h2><ConceptHelp title={localized(step.title, language)} helpKey={`case.${selected}`} explanation={localized(step.detail, language)} language={language} /></div><div className="institution-tags">{step.orgs.split(' · ').map(org => <span key={org}>{org}</span>)}</div><p>{localized(step.detail, language)}</p><div className="case-step-controls"><button type="button" onClick={() => setSelected(Math.max(0, selected - 1))} disabled={selected === 0}><ArrowLeft size={15} /> {interfaceText[language].previous}</button><button type="button" onClick={() => setSelected(Math.min(chapter.steps.length - 1, selected + 1))} disabled={selected === chapter.steps.length - 1}>{interfaceText[language].more} <ArrowRight size={15} /></button></div></motion.article></AnimatePresence></div>
   </div>;
 }
 

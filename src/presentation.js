@@ -1,9 +1,276 @@
 export const languages = ['en', 'fr', 'ar'];
 
+export const acronymExpansions = {
+  'WTO / OMC': { en: 'World Trade Organization', fr: 'Organisation mondiale du commerce', ar: 'منظمة التجارة العالمية' },
+  'WCO / OMD': { en: 'World Customs Organization', fr: 'Organisation mondiale des douanes', ar: 'منظمة الجمارك العالمية' },
+  'UNCITRAL / CNUDCI': { en: 'United Nations Commission on International Trade Law', fr: 'Commission des Nations unies pour le droit commercial international', ar: 'لجنة الأمم المتحدة للقانون التجاري الدولي' },
+  'UNCTAD / CNUCED': { en: 'United Nations Trade and Development', fr: 'Conférence des Nations unies sur le commerce et le développement', ar: 'الأمم المتحدة للتجارة والتنمية' },
+  IMF: { en: 'International Monetary Fund', fr: 'Fonds monétaire international', ar: 'صندوق النقد الدولي' },
+  'BANKS · UCP 600': { en: 'Uniform Customs and Practice for Documentary Credits', fr: 'Règles et usances uniformes relatives aux crédits documentaires', ar: 'القواعد والأعراف الموحدة للاعتمادات المستندية' },
+  SWIFT: { en: 'Society for Worldwide Interbank Financial Telecommunication', fr: 'Society for Worldwide Interbank Financial Telecommunication', ar: 'جمعية الاتصالات المالية العالمية بين البنوك' },
+  ISO: { en: 'International Organization for Standardization', fr: 'Organisation internationale de normalisation', ar: 'المنظمة الدولية للتوحيد القياسي' },
+  TIC: { en: 'Testing, inspection and certification services', fr: 'Services d’essais, d’inspection et de certification', ar: 'خدمات الاختبار والتفتيش والشهادات' },
+  CODEX: { en: 'Codex Alimentarius · “Food Code”', fr: 'Codex Alimentarius · « Code alimentaire »', ar: 'الدستور الغذائي · «مدونة الأغذية»' },
+  IMO: { en: 'International Maritime Organization', fr: 'Organisation maritime internationale', ar: 'المنظمة البحرية الدولية' },
+  IATA: { en: 'International Air Transport Association', fr: 'Association du transport aérien international', ar: 'الاتحاد الدولي للنقل الجوي' }
+};
+
+export const helpDetails = {
+  en: {
+    overview: {
+      '01': 'Governments set shared trade obligations; customs administrations apply them to individual shipments.',
+      '02': 'Incoterms allocate delivery tasks, costs and risk. Ownership, payment timing and product quality must be handled elsewhere in the contract.',
+      '03': 'Country-level monetary stability and a company’s invoice payment are separate problems handled by different institutions.',
+      '04': 'A standard, inspection report and legal market approval prove different things. Check which requirement applies to the product and destination.'
+    },
+    glossary: {
+      'WTO / OMC': 'The WTO works between governments. It sets treaty obligations; national customs offices apply them to individual imports.',
+      'WCO / OMD': 'The WCO maintains the shared HS classification, while each country publishes its own tariff schedule and rates.',
+      'ICC / CCI': 'Companies can incorporate ICC rules into a contract. The ICC is a business organization, not a government regulator.',
+      'L/C · Crédoc': 'Payment depends on documents matching the credit’s terms. The bank checks paperwork, not the cargo itself.',
+      'CISG / CVIM': 'The convention supplies default sales-contract rules when it applies; parties can generally exclude it in their contract.',
+      'HS / SH': 'The shared HS level is six digits. National tariff codes may add digits and duties can vary by destination.'
+    },
+    timeline: {
+      '1919': 'The ICC is a private business organization, not an intergovernmental body. Its work later produced practical tools such as Incoterms.',
+      '1944': 'Bretton Woods addressed monetary and reconstruction problems after the war. It did not establish the ICC, which already existed.',
+      '1947': 'GATT was a trade agreement negotiated by governments; ISO develops voluntary international standards. They solve different problems.',
+      '1952': 'The Council was the WCO’s predecessor. The Harmonized System arrived later, entering into force in 1988.',
+      '1995': 'The WTO is an intergovernmental organization. Its agreements cover goods, services and intellectual property, not customs operations alone.'
+    },
+    stories: {
+      'silk-roads': '“Silk Road” is shorthand for many connected routes, not one road or one authority. The pictured Tang-era camel is a museum object, not a contemporary photograph of a caravan.',
+      'world-war-one': 'The ICC was founded in 1919 by business leaders seeking to rebuild trade. It was not created by a peace treaty or by governments.',
+      'world-war-two': 'The post-1945 system added new institutions: Bretton Woods shaped the IMF and World Bank, while GATT addressed trade rules. The ICC remained a separate business organization.'
+    },
+    organizations: {
+      'WTO / OMC': 'WTO members negotiate and apply trade agreements. National customs authorities still classify individual imports and collect duties.',
+      'WCO / OMD': 'The WCO maintains shared customs tools such as the Harmonized System. Countries add national tariff lines and set their own applicable rates.',
+      'UNCITRAL / CNUDCI': 'UNCITRAL drafts common legal texts; it is not a court. A convention or model law matters when adopted or applicable to the parties.',
+      'UNCTAD / CNUCED': 'UNCTAD combines policy research with technical assistance. It supports developing economies but does not negotiate trade agreements for them.'
+    },
+    hs: 'The international HS code is harmonized to six digits. National digits and duty rates vary; the code alone does not establish the final tax owed.',
+    hsCode: {
+      '09': 'The first two digits identify the chapter. Classification follows the product’s characteristics and the official HS rules.',
+      '0901': 'Four digits identify the heading before the exact international subheading is determined.',
+      '0901-21': 'All six digits identify the internationally harmonized subheading for roasted, non-decaffeinated coffee.',
+      '+ 2–4': 'Extra digits are national subdivisions. Confirm the importing country’s tariff line and current rate.'
+    },
+    incoterms: {
+      EXW: 'EXW leaves the seller with minimal delivery duties and does not require loading. If the buyer cannot clear export, FCA may be more practical.',
+      FCA: 'FCA works for any transport mode. The named handover place matters because it determines where delivery and risk transfer occur.',
+      FOB: 'FOB is for sea or inland-waterway transport. For container cargo handed to a carrier before loading, FCA is often the better fit.',
+      CIF: 'CIF separates cost from risk: the seller pays carriage and insurance to destination, while transit risk transfers at shipment.',
+      DAP: 'Under DAP the seller brings the goods ready for unloading; the buyer handles import clearance and import duties.',
+      DDP: 'DDP places import clearance and duties on the seller. Confirm the seller can legally act as importer in the destination country.'
+    },
+    finance: {
+      IMF: 'The IMF works with member countries on monetary stability and balance-of-payments needs; it does not pay a company’s import invoice.',
+      'WORLD BANK': 'The World Bank Group finances development. It is distinct from the commercial bank that issues a buyer’s letter of credit.',
+      'BANKS · UCP 600': 'A document discrepancy can delay payment even when the cargo is perfect. Specify documents the seller can obtain and the carrier can issue.',
+      SWIFT: 'SWIFT transports standardized financial messages. The payment undertaking comes from the bank and instrument, not from the network.'
+    },
+    creditSteps: {
+      '0': 'The buyer should align the credit amount, expiry, shipment deadline and required documents with the sales contract before issuance.',
+      '1': 'An advising bank authenticates and passes on the credit; it does not automatically add its own promise to pay.',
+      '2': 'The seller should check the credit before shipping. A small document discrepancy can delay or prevent honour.',
+      '3': 'Banks examine documents against the credit, not the physical cargo. Inspection certificates are required only when the credit asks for them.'
+    },
+    phases: {
+      specify: 'Start with the importing country’s rules and the buyer’s contract. A requirement that applies to one market may not apply to another.',
+      verify: 'Inspection is evidence about specified checks at a point in time. It is not a blanket guarantee of future performance or safety.',
+      transport: 'The transport mode changes the applicable safety framework and document. Sea and air rules are not interchangeable.'
+    },
+    standards: {
+      ISO: 'ISO writes standards; independent certification bodies assess a company’s management system. ISO itself does not certify suppliers.',
+      TIC: 'The inspection order defines the lot, tests and acceptance criteria. A report covers that sample and time; it cannot guarantee later handling or every unit.',
+      CODEX: 'Import authorities use Codex as a scientific reference for areas such as residues and hygiene, then set enforceable national limits and checks.',
+      IMO: 'IMO member states adopt and implement conventions. SOLAS focuses on ship safety, MARPOL on pollution; a carrier issues the bill of lading.',
+      IATA: 'For air cargo, confirm current dangerous-goods rules, packing instructions and carrier acceptance. An air waybill records carriage, not ownership.'
+    },
+    case: {
+      '0': 'CISG applies only when its conditions are met and the parties have not excluded it. Name the exact port and Incoterms edition in the contract.',
+      '1': 'HS classification depends on the machine’s technical features. Confirm national tariff treatment and origin with current customs guidance.',
+      '2': 'A letter of credit is optional and must be agreed in the contract. Banks promise only what the credit says, subject to compliant documents.',
+      '3': 'ISO 9001 concerns a quality-management system, not certification of a particular machine. Check whether the destination requires product approval.',
+      '4': 'Container dimensions, ship-safety rules and the bill of lading come from different standards and actors; the carrier issues the transport document.',
+      '5': 'The importer remains responsible for accurate declarations and applicable duties. Bank document compliance is separate from customs release.'
+    }
+  },
+  fr: {
+    overview: {
+      '01': 'Les gouvernements fixent des obligations communes ; les douanes les appliquent à chaque déclaration.',
+      '02': 'Les Incoterms répartissent tâches, frais et risques. Propriété, paiement et qualité doivent être traités séparément au contrat.',
+      '03': 'La stabilité monétaire d’un pays et le paiement d’une facture commerciale sont deux problèmes distincts.',
+      '04': 'Norme, rapport d’inspection et autorisation de mise sur le marché prouvent des choses différentes. Vérifier l’exigence à destination.'
+    },
+    glossary: {
+      'WTO / OMC': 'L’OMC agit entre gouvernements. Elle fixe des obligations conventionnelles ; les douanes nationales les appliquent aux importations.',
+      'WCO / OMD': 'L’OMD entretient la nomenclature SH commune ; chaque pays publie son tarif et ses taux.',
+      'ICC / CCI': 'Les entreprises peuvent intégrer les règles de la CCI à leur contrat. La CCI est une organisation d’entreprises, pas un régulateur public.',
+      'L/C · Crédoc': 'Le paiement dépend de la conformité des documents aux conditions du crédit. La banque vérifie les pièces, pas la cargaison.',
+      'CISG / CVIM': 'La convention fournit des règles par défaut lorsqu’elle s’applique ; les parties peuvent généralement l’exclure au contrat.',
+      'HS / SH': 'Le niveau SH commun comporte six chiffres. Le tarif national peut en ajouter et les droits varient selon la destination.'
+    },
+    timeline: {
+      '1919': 'La CCI est une organisation privée d’entreprises, pas une institution intergouvernementale. Elle publiera ensuite des outils comme les Incoterms.',
+      '1944': 'Bretton Woods répond aux problèmes monétaires et de reconstruction d’après-guerre. La CCI existe déjà depuis 1919.',
+      '1947': 'Le GATT est un accord commercial négocié par les gouvernements ; l’ISO élabore des normes internationales volontaires. Leurs rôles diffèrent.',
+      '1952': 'Le Conseil est le prédécesseur de l’OMD. Le Système harmonisé arrive plus tard et entre en vigueur en 1988.',
+      '1995': 'L’OMC est une organisation intergouvernementale. Ses accords couvrent biens, services et propriété intellectuelle, pas seulement les opérations douanières.'
+    },
+    stories: {
+      'silk-roads': '« Route de la soie » désigne plusieurs itinéraires reliés, pas une route ni une autorité unique. Le chameau Tang illustré est un objet de musée, pas une photo de caravane d’époque.',
+      'world-war-one': 'La CCI est fondée en 1919 par des dirigeants d’entreprise qui veulent relancer les échanges. Elle ne découle ni d’un traité de paix ni d’un gouvernement.',
+      'world-war-two': 'Après 1945, Bretton Woods structure FMI et Banque mondiale, tandis que le GATT traite des règles commerciales. La CCI reste une organisation distincte d’entreprises.'
+    },
+    organizations: {
+      'WTO / OMC': 'Les membres de l’OMC négocient et appliquent les accords commerciaux. Les douanes nationales classent les importations et perçoivent les droits.',
+      'WCO / OMD': 'L’OMD entretient des outils douaniers communs comme le Système harmonisé. Les pays ajoutent leurs subdivisions et fixent les taux applicables.',
+      'UNCITRAL / CNUDCI': 'La CNUDCI élabore des textes juridiques communs ; ce n’est pas un tribunal. Une convention ou loi type doit être applicable ou adoptée.',
+      'UNCTAD / CNUCED': 'La CNUCED associe recherche sur les politiques et assistance technique. Elle appuie les économies en développement sans négocier les accords à leur place.'
+    },
+    hs: 'Le code SH international est harmonisé sur six chiffres. Les subdivisions nationales et les taux varient ; le code seul ne détermine pas l’impôt final.',
+    hsCode: {
+      '09': 'Les deux premiers chiffres désignent le chapitre. Le classement dépend des caractéristiques du produit et des règles officielles.',
+      '0901': 'Quatre chiffres identifient la position, avant de préciser la sous-position internationale.',
+      '0901-21': 'Ces six chiffres désignent la sous-position harmonisée du café torréfié non décaféiné.',
+      '+ 2–4': 'Les chiffres supplémentaires sont nationaux. Vérifier la ligne tarifaire et le taux en vigueur dans le pays importateur.'
+    },
+    incoterms: {
+      EXW: 'EXW impose peu d’obligations de livraison au vendeur et ne l’oblige pas à charger. Si l’acheteur ne peut dédouaner à l’export, FCA peut mieux convenir.',
+      FCA: 'FCA convient à tous les modes. Le lieu de remise convenu détermine où livraison et transfert du risque ont lieu.',
+      FOB: 'FOB est réservé au maritime et au fluvial. Pour un conteneur remis au transporteur avant chargement, FCA convient souvent mieux.',
+      CIF: 'CIF sépare frais et risque : le vendeur paie transport et assurance jusqu’à destination, mais le risque passe au départ.',
+      DAP: 'En DAP, le vendeur livre les biens prêts à décharger ; l’acheteur gère le dédouanement import et les droits correspondants.',
+      DDP: 'DDP met dédouanement et droits d’importation à la charge du vendeur. Vérifier qu’il peut légalement importer dans le pays de destination.'
+    },
+    finance: {
+      IMF: 'Le FMI accompagne les pays sur la stabilité monétaire et la balance des paiements ; il ne règle pas la facture d’importation d’une entreprise.',
+      'WORLD BANK': 'Le Groupe de la Banque mondiale finance le développement. Il est distinct de la banque commerciale qui émet le crédit documentaire.',
+      'BANKS · UCP 600': 'Un écart documentaire peut retarder le paiement, même si la cargaison est conforme. Prévoir des pièces que le vendeur peut obtenir et le transporteur émettre.',
+      SWIFT: 'SWIFT transporte des messages financiers standardisés. L’engagement de paiement vient de la banque et de l’instrument, pas du réseau.'
+    },
+    creditSteps: {
+      '0': 'Avant émission, aligner montant, échéance, date d’expédition et documents requis sur le contrat de vente.',
+      '1': 'La banque notificatrice authentifie et transmet le crédit ; elle n’ajoute pas automatiquement sa propre promesse de paiement.',
+      '2': 'Le vendeur devrait vérifier le crédit avant expédition. Une divergence documentaire peut retarder ou empêcher le paiement.',
+      '3': 'Les banques examinent les documents, pas la cargaison. Un certificat d’inspection n’est exigé que si le crédit le demande.'
+    },
+    phases: {
+      specify: 'Commencer par la réglementation du pays d’importation et le contrat. Une exigence d’un marché ne s’applique pas nécessairement aux autres.',
+      verify: 'Une inspection apporte une preuve sur des contrôles précis à un moment donné ; elle ne garantit pas toutes les performances futures.',
+      transport: 'Le mode de transport détermine le cadre de sécurité et les documents applicables. Les règles aériennes et maritimes diffèrent.'
+    },
+    standards: {
+      ISO: 'L’ISO publie des normes ; des organismes indépendants certifient les systèmes de management. L’ISO ne certifie pas les fournisseurs.',
+      TIC: 'Le mandat d’inspection précise lot, essais et critères d’acceptation. Le rapport décrit un échantillon à un instant donné, pas chaque unité ni sa manutention ultérieure.',
+      CODEX: 'Les autorités utilisent le Codex comme référence scientifique, notamment pour résidus et hygiène, puis fixent les limites et contrôles nationaux applicables.',
+      IMO: 'Les États membres adoptent et appliquent les conventions de l’OMI. SOLAS porte sur la sécurité des navires, MARPOL sur la pollution ; le transporteur émet le connaissement.',
+      IATA: 'Pour l’aérien, vérifier les règles sur marchandises dangereuses, l’emballage et l’acceptation du transporteur. La LTA constate le transport, pas la propriété.'
+    },
+    case: {
+      '0': 'La CVIM s’applique selon ses conditions, sauf exclusion par les parties. Préciser le port exact et l’édition des Incoterms au contrat.',
+      '1': 'Le classement SH dépend des caractéristiques techniques de la machine. Vérifier le tarif national et l’origine auprès des douanes.',
+      '2': 'Le crédit documentaire est facultatif et doit être convenu. La banque s’engage selon le texte du crédit et les documents conformes.',
+      '3': 'ISO 9001 concerne un système de management, pas la certification d’une machine précise. Vérifier l’agrément produit exigé à destination.',
+      '4': 'Dimensions du conteneur, sécurité du navire et connaissement relèvent de normes et acteurs différents ; le transporteur émet le document.',
+      '5': 'L’importateur reste responsable de ses déclarations et droits de douane. La conformité documentaire bancaire est distincte du dédouanement.'
+    }
+  },
+  ar: {
+    overview: {
+      '01': 'تضع الحكومات التزامات تجارية مشتركة، وتطبقها إدارات الجمارك على كل بيان استيراد.',
+      '02': 'توزع Incoterms مهام التسليم والتكاليف والمخاطر، ولا تحدد الملكية أو الدفع أو جودة المنتج.',
+      '03': 'يختلف استقرار اقتصاد الدولة عن دفع شركة لفاتورة تجارية؛ ولكل منهما مؤسساته.',
+      '04': 'يثبت المعيار وتقرير الفحص والموافقة الحكومية أموراً مختلفة. تحققوا مما يطلبه سوق الوجهة.'
+    },
+    glossary: {
+      'WTO / OMC': 'تعمل منظمة التجارة بين الحكومات وتضع التزامات الاتفاقيات؛ وتطبق الجمارك الوطنية هذه الالتزامات على الواردات.',
+      'WCO / OMD': 'تدير منظمة الجمارك النظام المنسق المشترك، بينما تنشر كل دولة تعريفتها ومعدلاتها.',
+      'ICC / CCI': 'يمكن للشركات إدراج قواعد غرفة التجارة في عقودها. والغرفة منظمة أعمال وليست جهة تنظيم حكومية.',
+      'L/C · Crédoc': 'يعتمد الدفع على مطابقة المستندات لشروط الاعتماد. يفحص البنك الأوراق لا البضاعة نفسها.',
+      'CISG / CVIM': 'توفر الاتفاقية قواعد افتراضية عندما تنطبق؛ ويمكن للأطراف عموماً استبعادها من العقد.',
+      'HS / SH': 'يتكون المستوى الدولي من ستة أرقام. وقد تضيف التعريفة الوطنية أرقاماً، وتختلف الرسوم حسب الوجهة.'
+    },
+    timeline: {
+      '1919': 'غرفة التجارة الدولية منظمة خاصة بالأعمال وليست هيئة حكومية دولية. وأصدرت لاحقاً أدوات عملية مثل Incoterms.',
+      '1944': 'عالج بريتون وودز مشكلات النقد وإعادة الإعمار بعد الحرب. وكانت غرفة التجارة الدولية قد تأسست بالفعل عام 1919.',
+      '1947': 'الجات اتفاق تجاري تفاوضت عليه الحكومات، بينما تطور ISO معايير دولية طوعية؛ ولكل منهما دور مختلف.',
+      '1952': 'كان المجلس هو السلف لمنظمة الجمارك العالمية. وظهر النظام المنسق لاحقاً ودخل حيز التنفيذ عام 1988.',
+      '1995': 'منظمة التجارة العالمية منظمة حكومية دولية؛ وتشمل اتفاقياتها السلع والخدمات والملكية الفكرية، لا العمليات الجمركية وحدها.'
+    },
+    stories: {
+      'silk-roads': '«طريق الحرير» اسم مختصر لشبكة طرق مترابطة، لا لطريق واحد أو سلطة موحدة. والجمل من عهد تانغ تمثال متحفي، لا صورة لقافلة من تلك الحقبة.',
+      'world-war-one': 'تأسست غرفة التجارة عام 1919 على يد قادة أعمال سعوا لاستعادة التجارة. لم تنشأ بموجب معاهدة سلام أو بقرار حكومي.',
+      'world-war-two': 'وسّع ما بعد 1945 التعاون: وضع بريتون وودز إطار صندوق النقد والبنك الدولي، وعالجت الجات قواعد التجارة. وظلت غرفة التجارة منظمة أعمال مستقلة.'
+    },
+    organizations: {
+      'WTO / OMC': 'يتفاوض أعضاء منظمة التجارة على الاتفاقيات ويطبقونها؛ أما الجمارك الوطنية فتصنف الواردات وتحصل الرسوم.',
+      'WCO / OMD': 'تدير منظمة الجمارك أدوات مشتركة مثل النظام المنسق. وتضيف الدول بنودها التعريفية الوطنية وتحدد الرسوم السارية.',
+      'UNCITRAL / CNUDCI': 'تعد الأونسيترال نصوصاً قانونية مشتركة، وليست محكمة. ولا تنطبق الاتفاقية أو القاعدة النموذجية إلا عند اعتمادها أو انطباق شروطها.',
+      'UNCTAD / CNUCED': 'تجمع الأونكتاد بين أبحاث السياسات والمساعدة التقنية لدعم الاقتصادات النامية؛ ولا تفاوض الاتفاقيات التجارية نيابة عنها.'
+    },
+    hs: 'يوحّد النظام المنسق دولياً عند ستة أرقام. تختلف الأرقام الوطنية والرسوم؛ لذلك لا يحدد الرمز وحده الضريبة النهائية.',
+    hsCode: {
+      '09': 'يشير أول رقمين إلى الفصل. ويعتمد التصنيف على خصائص المنتج والقواعد الرسمية.',
+      '0901': 'تحدد أربعة أرقام البند، قبل الوصول إلى البند الفرعي الدولي الدقيق.',
+      '0901-21': 'تحدد الأرقام الستة البند الفرعي الدولي للقهوة المحمصة غير منزوعة الكافيين.',
+      '+ 2–4': 'الأرقام الإضافية وطنية. تحققوا من بند التعريفة ومعدلها الحالي في بلد الاستيراد.'
+    },
+    incoterms: {
+      EXW: 'يحمّل EXW البائع أقل واجبات التسليم ولا يلزمه بالتحميل. وقد يكون FCA أنسب إذا تعذر على المشتري التخليص للتصدير.',
+      FCA: 'يناسب FCA جميع وسائل النقل. ويحدد مكان التسليم المتفق عليه النقطة التي تنتقل عندها مسؤولية التسليم والمخاطر.',
+      FOB: 'يقتصر FOB على النقل البحري والنهري. وغالباً ما يكون FCA أنسب للحاويات التي تسلم للناقل قبل تحميلها على السفينة.',
+      CIF: 'يفصل CIF بين التكلفة والمخاطر: يدفع البائع النقل والتأمين حتى الوصول، لكن مخاطر الرحلة تنتقل عند الشحن.',
+      DAP: 'في DAP يوصل البائع البضاعة جاهزة للتفريغ؛ ويتولى المشتري التخليص للاستيراد ورسومه.',
+      DDP: 'يحمّل DDP البائع التخليص ورسوم الاستيراد؛ ويجب التأكد من قدرته القانونية على الاستيراد في بلد الوجهة.'
+    },
+    finance: {
+      IMF: 'يدعم صندوق النقد استقرار الدول واحتياجات ميزان المدفوعات؛ ولا يدفع فاتورة استيراد شركة بعينها.',
+      'WORLD BANK': 'تمول مجموعة البنك الدولي التنمية، وهي مختلفة عن البنك التجاري الذي يصدر اعتماد المشتري.',
+      'BANKS · UCP 600': 'قد يؤدي اختلاف المستندات إلى تأخير الدفع حتى لو كانت البضاعة سليمة. حددوا مستندات يستطيع البائع الحصول عليها والناقل إصدارها.',
+      SWIFT: 'تنقل SWIFT الرسائل المالية الموحدة؛ أما تعهد الدفع فيصدر عن البنك وأداة الدفع، لا عن الشبكة.'
+    },
+    creditSteps: {
+      '0': 'قبل الإصدار، يجب مطابقة مبلغ الاعتماد وانتهائه وموعد الشحن والمستندات المطلوبة مع عقد البيع.',
+      '1': 'يتحقق البنك المبلّغ من الاعتماد وينقله، لكنه لا يضيف تلقائياً تعهداً مستقلاً بالدفع.',
+      '2': 'ينبغي للبائع مراجعة الاعتماد قبل الشحن؛ فقد يؤدي اختلاف بسيط في المستندات إلى تأخير الدفع أو رفضه.',
+      '3': 'تفحص البنوك المستندات لا البضاعة الفعلية. ولا يلزم تقرير الفحص إلا إذا طلبه الاعتماد.'
+    },
+    phases: {
+      specify: 'ابدأوا بقواعد بلد الاستيراد والعقد؛ فمتطلبات سوق معين لا تنطبق بالضرورة على الأسواق الأخرى.',
+      verify: 'يثبت الفحص نتائج اختبارات محددة في وقت معين، ولا يضمن كل أداء مستقبلي أو كل جوانب السلامة.',
+      transport: 'تحدد وسيلة النقل قواعد السلامة ووثائق الشحن المناسبة؛ فالنقل البحري والجوي يخضعان لأطر مختلفة.'
+    },
+    standards: {
+      ISO: 'تنشر ISO المعايير، بينما تصدق جهات مستقلة على أنظمة الإدارة. ولا تصدق ISO الموردين بنفسها.',
+      TIC: 'يحدد طلب الفحص الدفعة والاختبارات ومعايير القبول. ويسجل التقرير عينة ووقتاً معيناً، ولا يضمن كل وحدة أو مناولتها لاحقاً.',
+      CODEX: 'تستخدم السلطات Codex مرجعاً علمياً لبقايا المبيدات والنظافة، ثم تضع الحدود والفحوص الوطنية الملزمة.',
+      IMO: 'تعتمد الدول الأعضاء اتفاقيات المنظمة البحرية وتنفذها. تركز SOLAS على سلامة السفن وMARPOL على التلوث؛ ويصدر الناقل بوليصة الشحن.',
+      IATA: 'في الشحن الجوي، تحققوا من قواعد البضائع الخطرة والتعبئة وقبول الناقل. تثبت بوليصة الشحن الجوي النقل لا الملكية.'
+    },
+    case: {
+      '0': 'تسري اتفاقية البيع CISG عند تحقق شروطها ما لم تستبعدها الأطراف. اذكروا الميناء المحدد وإصدار Incoterms في العقد.',
+      '1': 'يعتمد تصنيف HS على الخصائص التقنية للآلة؛ ويجب التحقق من التعريفة الوطنية والمنشأ لدى الجمارك.',
+      '2': 'الاعتماد المستندي اختياري ويجب الاتفاق عليه. يلتزم البنك بنص الاعتماد عند تقديم مستندات مطابقة.',
+      '3': 'تخص ISO 9001 نظام إدارة الجودة، لا شهادة الآلة ذاتها. تحققوا من الموافقات المطلوبة للمنتج في بلد الوصول.',
+      '4': 'تخضع أبعاد الحاوية وسلامة السفينة وبوليصة الشحن لمعايير وجهات مختلفة؛ ويصدر الناقل وثيقة النقل.',
+      '5': 'يبقى المستورد مسؤولاً عن صحة الإقرار والرسوم المستحقة. ومطابقة المستندات للبنك منفصلة عن الإفراج الجمركي.'
+    }
+  }
+};
+
 export const interfaceText = {
-  en: { library: 'Presentations', outline: 'Story outline', notes: 'Presenter notes', fullscreen: 'Enter presentation mode', exitFullscreen: 'Exit presentation mode', previous: 'Previous slide', next: 'Next slide', start: 'Begin presentation', close: 'Close', slide: 'Slide', of: 'of', chapters: 'chapters', chapter: 'Chapter', backToLibrary: 'All presentations', modeHint: 'Press F for presentation mode', seller: 'Seller', buyer: 'Buyer', risk: 'Risk transfers', cost: 'Seller pays to', customs: 'Customs', transport: 'Mode', why: 'Why it matters', impact: 'What changed', glossary: 'Essential trade vocabulary', notesHeading: 'Speaking notes', more: 'Explore chapter', checklist: 'The shipment, step by step', themeLight: 'Switch to light theme', themeDark: 'Switch to dark theme', historyArc: 'A longer story of trade', imageCredit: 'Image & archive credit' },
-  fr: { library: 'Présentations', outline: 'Fil conducteur', notes: 'Notes orateur', fullscreen: 'Passer en mode présentation', exitFullscreen: 'Quitter le mode présentation', previous: 'Diapositive précédente', next: 'Diapositive suivante', start: 'Commencer la présentation', close: 'Fermer', slide: 'Diapositive', of: 'sur', chapters: 'chapitres', chapter: 'Chapitre', backToLibrary: 'Toutes les présentations', modeHint: 'Touche F : mode présentation', seller: 'Vendeur', buyer: 'Acheteur', risk: 'Transfert du risque', cost: 'Frais vendeur jusqu’à', customs: 'Douanes', transport: 'Mode', why: 'Pourquoi ?', impact: 'Ce qui change', glossary: 'Vocabulaire essentiel du commerce', notesHeading: 'Notes de présentation', more: 'Explorer le chapitre', checklist: 'La transaction, étape par étape', themeLight: 'Activer le thème clair', themeDark: 'Activer le thème sombre', historyArc: 'Une longue histoire du commerce', imageCredit: 'Crédit image et archives' },
-  ar: { library: 'العروض', outline: 'مسار العرض', notes: 'ملاحظات المتحدث', fullscreen: 'بدء وضع العرض', exitFullscreen: 'إنهاء وضع العرض', previous: 'الشريحة السابقة', next: 'الشريحة التالية', start: 'ابدأ العرض', close: 'إغلاق', slide: 'الشريحة', of: 'من', chapters: 'فصول', chapter: 'الفصل', backToLibrary: 'كل العروض', modeHint: 'اضغط F لبدء وضع العرض', seller: 'البائع', buyer: 'المشتري', risk: 'انتقال المخاطر', cost: 'تكاليف البائع حتى', customs: 'الجمارك', transport: 'وسيلة النقل', why: 'لماذا؟', impact: 'ما الذي تغيّر؟', glossary: 'مصطلحات أساسية في التجارة', notesHeading: 'ملاحظات العرض', more: 'اكتشف الفصل', checklist: 'رحلة الشحنة خطوة بخطوة', themeLight: 'تفعيل المظهر الفاتح', themeDark: 'تفعيل المظهر الداكن', historyArc: 'حكاية أطول للتجارة', imageCredit: 'مصدر الصورة والأرشيف' }
+  en: { library: 'Presentations', outline: 'Story outline', notes: 'Presenter notes', fullscreen: 'Enter presentation mode', exitFullscreen: 'Exit presentation mode', previous: 'Previous slide', next: 'Next slide', start: 'Begin presentation', close: 'Close', slide: 'Slide', of: 'of', chapters: 'chapters', chapter: 'Chapter', backToLibrary: 'All presentations', modeHint: 'Press F for presentation mode', seller: 'Seller', buyer: 'Buyer', risk: 'Risk transfers', cost: 'Seller pays to', customs: 'Customs', transport: 'Mode', why: 'Why it matters', impact: 'What changed', glossary: 'Essential trade vocabulary', notesHeading: 'Speaking notes', more: 'Explore chapter', checklist: 'The shipment, step by step', themeLight: 'Switch to light theme', themeDark: 'Switch to dark theme', historyArc: 'A longer story of trade', imageCredit: 'Image & archive credit', inPractice: 'In practice' },
+  fr: { library: 'Présentations', outline: 'Fil conducteur', notes: 'Notes orateur', fullscreen: 'Passer en mode présentation', exitFullscreen: 'Quitter le mode présentation', previous: 'Diapositive précédente', next: 'Diapositive suivante', start: 'Commencer la présentation', close: 'Fermer', slide: 'Diapositive', of: 'sur', chapters: 'chapitres', chapter: 'Chapitre', backToLibrary: 'Toutes les présentations', modeHint: 'Touche F : mode présentation', seller: 'Vendeur', buyer: 'Acheteur', risk: 'Transfert du risque', cost: 'Frais vendeur jusqu’à', customs: 'Douanes', transport: 'Mode', why: 'Pourquoi ?', impact: 'Ce qui change', glossary: 'Vocabulaire essentiel du commerce', notesHeading: 'Notes de présentation', more: 'Explorer le chapitre', checklist: 'La transaction, étape par étape', themeLight: 'Activer le thème clair', themeDark: 'Activer le thème sombre', historyArc: 'Une longue histoire du commerce', imageCredit: 'Crédit image et archives', inPractice: 'En pratique' },
+  ar: { library: 'العروض', outline: 'مسار العرض', notes: 'ملاحظات المتحدث', fullscreen: 'بدء وضع العرض', exitFullscreen: 'إنهاء وضع العرض', previous: 'الشريحة السابقة', next: 'الشريحة التالية', start: 'ابدأ العرض', close: 'إغلاق', slide: 'الشريحة', of: 'من', chapters: 'فصول', chapter: 'الفصل', backToLibrary: 'كل العروض', modeHint: 'اضغط F لبدء وضع العرض', seller: 'البائع', buyer: 'المشتري', risk: 'انتقال المخاطر', cost: 'تكاليف البائع حتى', customs: 'الجمارك', transport: 'وسيلة النقل', why: 'لماذا؟', impact: 'ما الذي تغيّر؟', glossary: 'مصطلحات أساسية في التجارة', notesHeading: 'ملاحظات العرض', more: 'اكتشف الفصل', checklist: 'رحلة الشحنة خطوة بخطوة', themeLight: 'تفعيل المظهر الفاتح', themeDark: 'تفعيل المظهر الداكن', historyArc: 'حكاية أطول للتجارة', imageCredit: 'مصدر الصورة والأرشيف', inPractice: 'عملياً' }
+};
+
+export const helpText = {
+  en: { label: 'Explain', title: 'About this concept', close: 'Close explanation' },
+  fr: { label: 'Expliquer', title: 'À propos de ce concept', close: 'Fermer l’explication' },
+  ar: { label: 'شرح', title: 'حول هذا المفهوم', close: 'إغلاق الشرح' }
 };
 
 export const tradeDeck = {
@@ -161,7 +428,20 @@ export const tradeDeck = {
       id: 'standards', type: 'standards',
       title: { en: 'Standards make goods ready to travel.', fr: 'Les normes préparent les marchandises au voyage.', ar: 'تُهيّئ المعايير البضائع للتداول.' },
       kicker: { en: '07 / Quality, safety & transport', fr: '07 / Qualité, sécurité et transport', ar: '07 / الجودة والسلامة والنقل' },
-      intro: { en: 'The product, its packaging and its mode of transport must meet requirements in both the contract and destination market.', fr: 'Le produit, son emballage et son transport doivent répondre aux exigences du contrat et du marché de destination.', ar: 'يجب أن يطابق المنتج وتغليفه ووسيلة نقله شروط العقد ومتطلبات سوق الوصول.' },
+      intro: { en: 'A shipment is not “ready” because it carries a logo. The buyer checks which product, inspection and transport requirements apply to this contract and destination.', fr: 'Un produit n’est pas « prêt » parce qu’il porte un logo. L’acheteur vérifie quelles exigences produit, inspection et transport s’appliquent au contrat et au pays de destination.', ar: 'لا تصبح الشحنة «جاهزة» لمجرد وجود شعار عليها. يتحقق المشتري من متطلبات المنتج والفحص والنقل التي يفرضها العقد وبلد الوصول.' },
+      lens: { en: 'Standards define the target. Inspection supplies evidence. Transport rules protect the journey.', fr: 'Les normes définissent l’objectif. L’inspection apporte des preuves. Les règles de transport protègent le trajet.', ar: 'تحدد المعايير الهدف، ويوفر الفحص الدليل، وتحمي قواعد النقل الرحلة.' },
+      phases: [
+        { id: 'specify', title: { en: '1. Set the requirement', fr: '1. Définir l’exigence', ar: '1. تحديد المتطلبات' }, description: { en: 'The contract or market rule says what “acceptable” means.', fr: 'Le contrat ou la règle du marché définit ce qui est « conforme ».', ar: 'يحدد العقد أو نظام السوق معنى «المطابقة».' }, organizations: ['ISO'] },
+        { id: 'verify', title: { en: '2. Verify the product', fr: '2. Vérifier le produit', ar: '2. فحص المنتج' }, description: { en: 'Tests and inspections provide evidence when required; food rules add a separate safety check.', fr: 'Essais et inspections apportent des preuves s’ils sont exigés ; l’alimentation relève aussi de règles sanitaires.', ar: 'توفر الاختبارات والفحوص أدلة عند طلبها، وتخضع الأغذية أيضاً لمتطلبات السلامة.' }, organizations: ['TIC', 'CODEX'] },
+        { id: 'transport', title: { en: '3. Move it safely', fr: '3. Transporter en sécurité', ar: '3. نقلها بأمان' }, description: { en: 'Mode-specific rules govern the vessel, aircraft, cargo and transport document.', fr: 'Des règles propres au mode encadrent le navire, l’avion, la cargaison et le document de transport.', ar: 'تنظم قواعد كل وسيلة السفينة أو الطائرة والبضاعة ووثيقة النقل.' }, organizations: ['IMO', 'IATA'] }
+      ],
+      applications: {
+        ISO: { en: 'For a machinery order, the contract can name the relevant management or container standard. ISO publishes standards; it does not certify the supplier.', fr: 'Pour l’achat d’une machine, le contrat peut préciser la norme de management ou de conteneur pertinente. L’ISO publie des normes ; elle ne certifie pas le fournisseur.', ar: 'في عقد شراء آلة، يمكن تحديد معيار الإدارة أو الحاويات المطلوب. تنشر ISO المعايير لكنها لا تصدّق المورد.' },
+        TIC: { en: 'Before production, confirm whether the destination market or contract requires a pre-shipment inspection or Certificate of Conformity. A CoC is not required for every product.', fr: 'Avant la production, vérifier si le marché ou le contrat exige une inspection avant expédition ou un certificat de conformité. Le CoC n’est pas requis pour tous les produits.', ar: 'قبل الإنتاج، تحققوا مما إذا كان سوق الوصول أو العقد يطلب فحصاً قبل الشحن أو شهادة مطابقة. ولا تلزم الشهادة كل المنتجات.' },
+        CODEX: { en: 'For food, Codex standards provide international reference points for safety. Importing-country law sets the actual border requirements; Codex is not a product certificate.', fr: 'Pour les aliments, le Codex fournit des références internationales de sécurité. Le droit du pays importateur fixe les exigences à la frontière ; le Codex n’est pas un certificat produit.', ar: 'للأغذية، يوفر الدستور الغذائي مراجع دولية للسلامة. ويحدد قانون بلد الاستيراد متطلبات الحدود؛ وليس Codex شهادة منتج.' },
+        IMO: { en: 'For sea freight, SOLAS addresses ship safety and MARPOL pollution prevention. The carrier, not the IMO, issues the bill of lading.', fr: 'En maritime, SOLAS traite de la sécurité des navires et MARPOL de la prévention de la pollution. Le connaissement est émis par le transporteur, pas par l’OMI.', ar: 'في الشحن البحري، تتناول SOLAS سلامة السفن وMARPOL منع التلوث. ويصدر الناقل بوليصة الشحن، لا المنظمة البحرية.' },
+        IATA: { en: 'For air freight, check dangerous-goods classification, packaging and labels. The air waybill records carriage; IATA is an airline trade association, not a government regulator.', fr: 'En aérien, vérifier la classification, l’emballage et l’étiquetage des marchandises dangereuses. La lettre aérienne constate le transport ; l’IATA est une association professionnelle, pas un régulateur étatique.', ar: 'في الشحن الجوي، تحققوا من تصنيف البضائع الخطرة وتغليفها ووسمها. تثبت بوليصة الشحن الجوي النقل؛ وIATA اتحاد شركات طيران وليست جهة تنظيم حكومية.' }
+      },
       bodies: [
         { acronym: 'ISO', title: { en: 'Standards & interoperability', fr: 'Normes et interopérabilité', ar: 'المعايير والتوافق' }, badge: 'International standards', points: { en: ['ISO 9001 specifies quality-management-system requirements.', 'ISO 14001 addresses environmental-management systems.', 'ISO 668 standardizes dimensions and ratings of freight containers.'], fr: ['ISO 9001 spécifie les exigences des systèmes de management de la qualité.', 'ISO 14001 porte sur les systèmes de management environnemental.', 'ISO 668 normalise les dimensions et caractéristiques des conteneurs de fret.'], ar: ['تحدد ISO 9001 متطلبات أنظمة إدارة الجودة.', 'تتناول ISO 14001 أنظمة الإدارة البيئية.', 'تحدد ISO 668 أبعاد حاويات الشحن وخصائصها.'] } },
         { acronym: 'TIC', title: { en: 'Testing, inspection & certification', fr: 'Essais, inspection et certification', ar: 'الاختبار والفحص والتصديق' }, badge: 'SGS · Bureau Veritas · Intertek · TÜV', points: { en: ['May conduct pre-shipment inspection, laboratory testing and quantity checks.', 'A Certificate of Conformity may be required by a destination market or contract; requirements are product- and country-specific.'], fr: ['Peuvent effectuer une inspection avant expédition, des essais de laboratoire et des contrôles quantitatifs.', 'Un certificat de conformité peut être exigé par le marché ou le contrat ; les obligations dépendent du produit et du pays.'], ar: ['قد تجري فحصاً قبل الشحن واختبارات مخبرية وتحققاً من الكميات.', 'قد تطلب سوق الوجهة أو العقد شهادة مطابقة؛ وتختلف المتطلبات حسب المنتج والبلد.'] } },

@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { App } from './main.jsx';
 
 vi.mock('motion/react', async () => {
@@ -63,6 +63,33 @@ describe('presentation controls', () => {
     expect(document.querySelector('.studio-shell').dataset.theme).toBe('dark');
   });
 
+  it('opens a contextual concept explanation and closes it with Escape', async () => {
+    renderApp();
+    fireEvent.click(screen.getByRole('button', { name: 'Begin presentation' }));
+    await screen.findByRole('heading', { name: 'Four institutions. One moving shipment.' });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Explain: Rules & customs' }));
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toBeTruthy();
+    expect(within(dialog).getByRole('heading', { name: 'Rules & customs' })).toBeTruthy();
+    expect(within(dialog).getByText(/Governments set shared trade obligations/)).toBeTruthy();
+
+    fireEvent.keyDown(window, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).toBeNull();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Explain: Money & trust' }));
+    expect(within(screen.getByRole('dialog')).getByText(/Country-level monetary stability/)).toBeTruthy();
+    fireEvent.keyDown(window, { key: 'Escape' });
+
+    fireEvent.click(screen.getByRole('button', { name: 'FR' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Expliquer: Règles commerciales' }));
+    expect(within(screen.getByRole('dialog')).getByText(/Propriété, paiement et qualité/)).toBeTruthy();
+    fireEvent.keyDown(window, { key: 'Escape' });
+    fireEvent.click(screen.getByRole('button', { name: 'EN' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Explain: WTO / OMC' }));
+    expect(within(screen.getByRole('dialog')).getByText(/The WTO works between governments/)).toBeTruthy();
+  });
+
   it('shows sourced Silk Road and World War stories', async () => {
     renderApp();
     fireEvent.click(screen.getByRole('button', { name: 'Begin presentation' }));
@@ -84,5 +111,20 @@ describe('presentation controls', () => {
 
     fireEvent.keyDown(window, { key: 'ArrowRight' });
     await screen.findByRole('heading', { name: 'A system built from hard lessons.' });
+  });
+
+  it('explains standards as a three-stage readiness process', async () => {
+    renderApp();
+    fireEvent.click(screen.getByRole('button', { name: 'Begin presentation' }));
+    for (let step = 0; step < 8; step += 1) fireEvent.keyDown(window, { key: 'ArrowRight' });
+
+    await screen.findByRole('heading', { name: 'Standards make goods ready to travel.' });
+    expect(screen.getByRole('heading', { name: '1. Set the requirement' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: '2. Verify the product' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: '3. Move it safely' })).toBeTruthy();
+    expect(screen.getByText('International Organization for Standardization')).toBeTruthy();
+    expect(screen.getByText('International Maritime Organization')).toBeTruthy();
+    expect(screen.getByText(/ISO publishes standards; it does not certify the supplier/)).toBeTruthy();
+    expect(screen.getByText(/The air waybill records carriage/)).toBeTruthy();
   });
 });
