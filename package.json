@@ -1,0 +1,38 @@
+{
+  "name": "sliders",
+  "version": "1.0.0",
+  "description": "A trilingual documentary-style presentation studio",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hamzaka99/Sliders.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hamzaka99/Sliders/issues"
+  },
+  "homepage": "https://github.com/Hamzaka99/Sliders#readme",
+  "dependencies": {
+    "lucide-react": "^1.61.0",
+    "motion": "^14.6.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
+    "@vitejs/plugin-react": "^6.1.2",
+    "happy-dom": "^21.0.4",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
+  }
+}
